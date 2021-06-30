@@ -1,29 +1,54 @@
-import DropDown from "./";
+import DropDown from "../components/DropDown";
 
 import "@testing-library/jest-dom";
 import { screen, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { unmountComponentAtNode } from "react-dom";
 
 const title = "Selecione o seu Pokemón Inicial";
 const options = ["Bubasaur", "Pikaxu", "Anestesia"];
 
 describe("DropDown", () => {
+   let container: Element | undefined;
+   beforeEach(() => {
+      // Configura um elemento do DOM como alvo do teste
+      container = document.createElement("div");
+      document.body.appendChild(container);
+   });
+
+   afterEach(() => {
+      // Limpar ao sair
+      if (!container) return;
+      unmountComponentAtNode(container);
+      container.remove();
+      container = undefined;
+   });
+
    it("Should start closed", () => {
-      // Renderizar o componente em memória
-      render(<DropDown title={title} options={options} onSelect={() => {}} />);
+      const { queryByText } = render(
+         <DropDown title={title} options={options} onSelect={() => {}} />,
+         {
+            container,
+         }
+      );
 
       options.forEach((option) => {
-         expect(screen.queryByText(option)).not.toBeInTheDocument();
+         expect(queryByText(option)).not.toBeInTheDocument();
       });
    });
 
    it("Should show options when open", () => {
       // Renderizar o componente em memória
-      render(<DropDown title={title} options={options} onSelect={() => {}} />);
+      const { queryByRole } = render(
+         <DropDown title={title} options={options} onSelect={() => {}} />,
+         {
+            container,
+         }
+      );
 
       options.forEach((option) => {
          expect(
-            screen.queryByRole("menuitem", { name: option })
+            queryByRole("menuitem", { name: option })
          ).not.toBeInTheDocument();
       });
 
@@ -31,9 +56,7 @@ describe("DropDown", () => {
       userEvent.click(dropDownButton);
 
       options.forEach((option) => {
-         expect(
-            screen.queryByRole("menuitem", { name: option })
-         ).toBeInTheDocument();
+         expect(queryByRole("menuitem", { name: option })).toBeInTheDocument();
       });
    });
 
@@ -42,7 +65,12 @@ describe("DropDown", () => {
       const onSelect = jest.fn();
 
       // Renderizar o componente
-      render(<DropDown title={title} options={options} onSelect={onSelect} />);
+      const { queryByRole } = render(
+         <DropDown title={title} options={options} onSelect={onSelect} />,
+         {
+            container,
+         }
+      );
 
       // Buscar o botão e clicar nele
       const dropDownButton = screen.getByRole("button", { name: title });
@@ -50,9 +78,7 @@ describe("DropDown", () => {
 
       // Verificar se as opções estão abertas
       options.forEach((option) => {
-         expect(
-            screen.queryByRole("menuitem", { name: option })
-         ).toBeInTheDocument();
+         expect(queryByRole("menuitem", { name: option })).toBeInTheDocument();
       });
 
       // Buscar uma opção para ser clicada e clicar nela.
@@ -67,7 +93,7 @@ describe("DropDown", () => {
       // Verificar se as opções foram fechadas
       options.forEach((option) => {
          expect(
-            screen.queryByRole("menuitem", { name: option })
+            queryByRole("menuitem", { name: option })
          ).not.toBeInTheDocument();
       });
    });

@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
+
 import DropDown from "./components/DropDown/";
+import AnotherPokemons from "./components/AnotherPokemons/";
 
 function App() {
    const [selectedPokemon, setSelectedPokemon] = useState<string | undefined>(
@@ -16,6 +18,8 @@ function App() {
             options={["Bubasaur", "Pikaxu", "Anestesia"]}
             onSelect={setSelectedPokemon}
          />
+
+         <AnotherPokemons />
       </div>
    );
 }
