@@ -8,6 +8,13 @@ import { unmountComponentAtNode } from "react-dom";
 const title = "Selecione o seu Pokemón Inicial";
 const options = ["Bubasaur", "Pikaxu", "Anestesia"];
 
+// Criando um mock para algum módulo
+jest.mock("../components/OtherComponent/", () => {
+   return function DummyOtherComponent() {
+      return <div>This is the virtual component of Other component</div>;
+   };
+});
+
 describe("DropDown", () => {
    let container: Element | undefined;
    beforeEach(() => {

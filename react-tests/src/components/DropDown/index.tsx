@@ -1,4 +1,5 @@
 import React, { MouseEventHandler, useState } from "react";
+import OtherComponent from "../OtherComponent/";
 
 type DropDownProperties = {
    title?: string;
@@ -16,6 +17,8 @@ const DropDown = ({ title, options, onSelect }: DropDownProperties) => {
 
    return (
       <div className="container-dropdown">
+         <OtherComponent />
+
          <button onClick={() => setDropDownOpen(true)}>{title}</button>
 
          {dropDownOpen && (
